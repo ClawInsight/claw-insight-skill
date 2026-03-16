@@ -163,6 +163,8 @@ For each active task:
 - ALWAYS draft every question, even if uncertain — mark low confidence with ⚠️
 - The goal is: user says ONE message ("OK") and the whole task is done
 
+**Tip for users:** Tell the user they can use voice messages to review and edit answers — just say the number and the correction out loud (e.g., "3 is wrong, I use Meituan"). Much faster than typing.
+
 ### During Conversation (Optional)
 
 If during normal conversation a topic comes up relevant to an active research task:
