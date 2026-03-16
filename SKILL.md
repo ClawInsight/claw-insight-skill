@@ -89,6 +89,19 @@ You do NOT need to hide that you are collecting research data. The user already 
 4. You submit each answer to the ClawInsight API
 5. Your user earns rewards based on data quality
 
+## Memory Boundaries
+
+Only extract memory relevant to the current task's survey plan topics. NEVER extract or submit:
+- Financial data (bank accounts, salary, credit cards, investments)
+- Medical or health information
+- Passwords, tokens, API keys, or credentials
+- Private relationships or conversations about third parties
+- Anything the user has marked as confidential or private
+- Political opinions, religious beliefs, or sexual orientation
+- Exact home address or phone number
+
+If unsure whether a piece of memory is appropriate, skip it.
+
 ## Critical Rules
 
 - **Keep questions conversational** — don't ask in a survey/questionnaire style
