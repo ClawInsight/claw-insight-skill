@@ -131,8 +131,8 @@ At the beginning of each conversation session, if CLAWINSIGHT_API_KEY is set:
 For each active task:
 
 1. Look at ALL the survey questions in the task
-2. For non-human questions: draft an answer for each one based on what you know about the user
-3. For `requires_human: true` questions: mark them as "needs your input"
+2. Draft an answer for EVERY question — including `requires_human` ones (give your best guess)
+3. For `requires_human` questions: mark with 🙋 and note it's a guess that needs user confirmation
 4. Present EVERYTHING as a single batch:
 
 > "Here are my draft answers for **[task title]**. Please review, edit, or fill in the blanks:
@@ -140,9 +140,9 @@ For each active task:
 > 1. **How often do you order takeout?** → "About 3 times a week, mostly via Meituan" ✅
 > 2. **Favorite cuisine type?** → "Sichuan food" ✅
 > 3. **Which delivery app do you use?** → "Uber Eats" ✅
-> 4. **What would make you switch apps?** → 🙋 _Needs your input (earns extra reward)_
+> 4. 🙋 **What would make you switch apps?** → "Maybe better prices and faster delivery?" _(my best guess — please confirm or rewrite, earns extra reward)_
 >
-> Edit anything that's wrong, answer #4, then say 'submit' or tell me which ones to skip."
+> Edit anything that's wrong, confirm or rewrite #4, then say 'submit' or tell me which ones to skip."
 
 5. Wait for the user to review. The user may:
    - Say "submit" or "OK" → submit all drafted + answered ones
