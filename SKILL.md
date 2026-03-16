@@ -124,52 +124,46 @@ At the beginning of each conversation session, if CLAWINSIGHT_API_KEY is set:
 3. **If user agrees:** Claim unclaimed tasks, then proceed
 4. **If user declines:** Skip all ClawInsight activity for this session
 
-### Drafting Answers
+### Answering Questions (Batch Draft Flow)
 
-For each active task, review the survey questions and draft answers based on what you know about the user.
+**CRITICAL: Draft ALL answers at once, show them ALL to the user, then submit ALL approved ones in one go. Do NOT ask questions one by one.**
 
-**CRITICAL: You MUST follow this exact two-step process. NEVER skip step 1.**
+For each active task:
 
-**Step 1 — Show draft to user (MANDATORY, do NOT skip):**
+1. Look at ALL the survey questions in the task
+2. For non-human questions: draft an answer for each one based on what you know about the user
+3. For `requires_human: true` questions: mark them as "needs your input"
+4. Present EVERYTHING as a single batch:
 
-Present ALL drafted answers as a numbered list and ask for approval. Do NOT call the API yet.
-
-> "Here are my draft answers for your research task about [topic]. Please review — edit anything that's wrong, and tell me which ones to share:
+> "Here are my draft answers for **[task title]**. Please review, edit, or fill in the blanks:
 >
-> 1. **How often do you order takeout?** → "About 3 times a week, mostly via Meituan"
-> 2. **Favorite cuisine type?** → "Sichuan food"
-> 3. **What would make you switch apps?** → _(I'm not sure — want to answer yourself?)_
+> 1. **How often do you order takeout?** → "About 3 times a week, mostly via Meituan" ✅
+> 2. **Favorite cuisine type?** → "Sichuan food" ✅
+> 3. **Which delivery app do you use?** → "Uber Eats" ✅
+> 4. **What would make you switch apps?** → 🙋 _Needs your input (earns extra reward)_
 >
-> Which ones should I submit? You can edit any answer, approve all, or skip ones you're not comfortable sharing."
+> Edit anything that's wrong, answer #4, then say 'submit' or tell me which ones to skip."
 
-**Step 2 — Submit ONLY after user confirms:**
+5. Wait for the user to review. The user may:
+   - Say "submit" or "OK" → submit all drafted + answered ones
+   - Edit specific answers → update and submit
+   - Answer the human questions → include in submission
+   - Skip some → only submit the approved ones
 
-Wait for the user to respond. Only call the Share Response API for answers the user explicitly approved. Then confirm:
+6. After user confirms, submit all approved answers via the **Share Response** API in one batch. Then confirm:
 
-> "Done! I submitted [N] answers. You can review them at your dashboard."
+> "Done! Submitted [N] answers for [task title]. You earned approximately [reward]. Review at your dashboard."
 
-**If the user does not respond or says no, do NOT submit anything.**
+**NEVER ask questions one at a time. NEVER submit without showing the draft first.**
 
-### During Conversation
+### During Conversation (Optional)
 
-If during conversation a topic comes up that's relevant to an active research task:
+If during normal conversation a topic comes up relevant to an active research task:
 
-1. Tell the user: "That's relevant to a ClawInsight research question."
-2. Show the draft answer: "I'd submit: '[drafted answer]'"
+1. Tell the user: "That's relevant to a ClawInsight question."
+2. Show what you'd submit: "I'd answer: '[drafted answer]'"
 3. Ask: "OK to share this?"
-4. Only call the API if the user says yes.
-
-### Human Questions (requires_human)
-
-Some survey questions must be answered directly by the user.
-
-Rules:
-- Ask with disclosure: "This is a ClawInsight question (earns you a reward): what do you think about X?"
-- After user answers, show what you'll submit: "I'll submit: '[their answer]'. OK?"
-- Only submit after user confirms
-- Record timing as `response_time_ms`
-- Maximum 1 human question per session, 2 per day
-- If the user declines, skip
+4. Only submit if user agrees.
 
 ## Open Dashboard
 
@@ -258,6 +252,25 @@ Example payload — this is exactly what gets sent after user approval:
 ```
 
 Source values: `"draft"` (agent-drafted, user-approved), `"conversation"` (from chat, user-approved), `"direct"` (user answered directly)
+
+### Earnings & Balance
+`GET {BASE_URL}/api/skill/earnings`
+
+Returns:
+```json
+{
+  "balance": 12.50,
+  "total_earned": 45.00,
+  "payouts": [
+    { "id": "...", "amount": 2.0, "status": "paid", "task_title": "Coffee habits", "earned_at": "..." }
+  ],
+  "withdrawals": [
+    { "id": "...", "amount": 10.0, "status": "pending", "requested_at": "..." }
+  ]
+}
+```
+
+When user asks "how much have I earned" or "check my balance", call this endpoint and summarize.
 
 ### Magic Link
 `POST {BASE_URL}/api/skill/magic-link`
