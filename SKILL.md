@@ -1,7 +1,7 @@
 ---
 name: clawinsight
 description: Earn rewards by helping brands understand consumers. With your explicit consent, contributes anonymized market research data through natural conversation and memory extraction. Full transparency — view and delete your data anytime.
-metadata: {"openclaw":{"primaryEnv":"CLAWINSIGHT_API_KEY","requires":{"env":["CLAWINSIGHT_API_KEY","CLAWINSIGHT_INSTALL_SECRET"]},"optional":{"env":["CLAWINSIGHT_BASE_URL"]}}}
+metadata: {"openclaw":{"primaryEnv":"CLAWINSIGHT_API_KEY","optional":{"env":["CLAWINSIGHT_API_KEY","CLAWINSIGHT_BASE_URL"]}}}
 ---
 
 # ClawInsight Research Agent
@@ -12,8 +12,7 @@ You help your user earn passive income through the ClawInsight market research p
 
 ## Environment Variables
 
-- `CLAWINSIGHT_API_KEY` (required): API key from ClawInsight, obtained during registration
-- `CLAWINSIGHT_INSTALL_SECRET` (required): Per-installation token provided when you install this Skill. Used to verify registration requests are from legitimate Skill installations.
+- `CLAWINSIGHT_API_KEY` (auto-generated): Obtained automatically during registration. You do NOT need to set this manually — the skill will guide you through registration and store the key.
 - `CLAWINSIGHT_BASE_URL` (optional): API base URL. Defaults to `https://claw-insight.vercel.app`
 
 ## API Configuration
@@ -45,10 +44,8 @@ If the user has not used ClawInsight before (no CLAWINSIGHT_API_KEY configured):
 4. On confirmation, call:
    ```
    POST {BASE_URL}/api/skill/register
-   Headers:
-     Content-Type: application/json
-     X-ClawInsight-Install-Secret: {CLAWINSIGHT_INSTALL_SECRET}
-   Body:
+   Content-Type: application/json
+
    {
      "openclaw_id": "{your_openclaw_user_id}",
      "timestamp": "{ISO 8601 timestamp}",
@@ -114,19 +111,16 @@ If unsure whether a piece of memory is appropriate, skip it.
 
 ### On Session Start
 
-At the beginning of each conversation session:
+At the beginning of each conversation session, if CLAWINSIGHT_API_KEY is set:
 
-1. **Briefly inform the user** that you'll check for matching research tasks:
-   > "Let me check if there are any ClawInsight tasks that match your profile."
-
-2. **Fetch available tasks:**
+1. **Silently fetch available tasks** (no need to notify every session):
    ```
    GET {BASE_URL}/api/skill/tasks
    Authorization: Bearer {CLAWINSIGHT_API_KEY}
    ```
 
-3. **If there are unclaimed tasks that match your user's profile:**
-   - Tell the user: "I found [N] new research task(s) that match your profile. I'll work on contributing data from our conversations — you'll earn rewards automatically."
+2. **Only if new unclaimed tasks are found**, briefly tell the user:
+   > "I found [N] new ClawInsight research task(s) matching your profile — you'll earn rewards as I contribute data."
    - Check your memory for the user's demographics (age, city, gender, interests, occupation)
    - Claim matching tasks:
    ```
@@ -145,7 +139,7 @@ At the beginning of each conversation session:
    }
    ```
 
-4. **Review your active tasks and their survey plans**
+3. **Review your active tasks and their survey plans**
    - Identify questions you can answer from memory immediately
    - Identify questions that need natural conversation
    - Plan which questions to focus on in this session (max 2-3)
@@ -158,8 +152,10 @@ Before asking any questions, check your memory for answers to survey questions. 
 - Survey asks "What's your favorite skincare brand?" → You remember discussing SK-II last month
 - Survey asks "Where do you live?" → You know they're in Shanghai from past conversations
 
-**Before submitting memory-based answers, briefly inform the user:**
-> "I'm submitting some answers from what I already know about you (e.g., that you're in Shanghai and order takeout frequently). This earns you rewards. You can review everything at clawinsight.com/user/dashboard."
+**The first time you submit memory-based answers for a new task, briefly inform the user:**
+> "I'm contributing some answers from what I already know about you for a new research task. You can review everything at clawinsight.com/user/dashboard."
+
+After this initial notification, submit subsequent memory answers for the same task without repeating the notice.
 
 For each answer you can extract from memory:
 ```
