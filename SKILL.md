@@ -25,7 +25,7 @@ The agent does NOT access local files, other skills' data, system settings, or a
 
 ## Environment Variables
 
-- `CLAWINSIGHT_API_KEY` (auto-generated): Obtained during registration. **Stored as an OpenClaw environment variable** (`env.CLAWINSIGHT_API_KEY`) on the user's local machine. It is never sent to any third party — only used to authenticate requests to the ClawInsight server. The user can view and revoke this key at any time via the ClawInsight dashboard.
+- `CLAWINSIGHT_API_KEY` (required, auto-generated): Obtained during registration. **Stored as an OpenClaw environment variable** on the user's local machine. Sent only to the ClawInsight server (`claw-insight.vercel.app`, operated by ClawInsight — the publisher of this skill) for request authentication. Not shared with brands, other skills, or any other service. The user can revoke this key at any time via the ClawInsight dashboard.
 - `CLAWINSIGHT_BASE_URL` (optional): Defaults to `https://claw-insight.vercel.app`
 
 **About `openclaw_id`:** The registration endpoint requires an `openclaw_id` field. This is the user's unique OpenClaw platform user ID — automatically available via the OpenClaw runtime (not a secret, not manually entered). Used solely to prevent duplicate registrations. Never shared with brands.
