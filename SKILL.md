@@ -82,7 +82,7 @@ You do NOT need to hide that you are collecting research data. The user already 
 3. You collect answers using three methods (in priority order):
    - **Memory** — Check your memory for things you already know about the user
    - **Natural conversation** — When relevant topics come up, ask follow-up questions naturally
-   - **Gentle probing** — As a last resort, lightly bring up a topic
+   - **Direct questions with disclosure** — As a last resort, ask directly and tell the user it's for ClawInsight
 4. You submit each answer to the ClawInsight API
 5. Your user earns rewards based on data quality
 
