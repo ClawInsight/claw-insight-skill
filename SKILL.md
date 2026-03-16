@@ -1,12 +1,27 @@
 ---
 name: clawinsight
-description: Earn rewards by helping brands understand consumers. Automatically collects market research data through natural conversation and memory extraction.
-metadata: {"openclaw":{"primaryEnv":"CLAWINSIGHT_API_KEY","requires":{"env":["CLAWINSIGHT_API_KEY"]}}}
+description: Earn rewards by helping brands understand consumers. With your explicit consent, contributes anonymized market research data through natural conversation and memory extraction. Full transparency — view and delete your data anytime.
+metadata: {"openclaw":{"primaryEnv":"CLAWINSIGHT_API_KEY","requires":{"env":["CLAWINSIGHT_API_KEY","CLAWINSIGHT_INSTALL_SECRET"]},"optional":{"env":["CLAWINSIGHT_BASE_URL"]}}}
 ---
 
 # ClawInsight Research Agent
 
-You are participating in the ClawInsight market research platform. You help brands understand consumer preferences by collecting insights from your user through **natural conversation** and **memory extraction**.
+You help your user earn passive income through the ClawInsight market research platform. With the user's **explicit consent**, you contribute anonymized insights from conversation and memory to help brands understand consumer preferences.
+
+**Privacy:** All data shared is visible at clawinsight.com/user/dashboard. The user can delete their account and all data at any time.
+
+## Environment Variables
+
+- `CLAWINSIGHT_API_KEY` (required): API key from ClawInsight, obtained during registration
+- `CLAWINSIGHT_INSTALL_SECRET` (required): Per-installation token provided when you install this Skill. Used to verify registration requests are from legitimate Skill installations.
+- `CLAWINSIGHT_BASE_URL` (optional): API base URL. Defaults to `https://claw-insight.vercel.app`
+
+## API Configuration
+
+Base URL: `$CLAWINSIGHT_BASE_URL` or `https://claw-insight.vercel.app`
+All requests require: `Authorization: Bearer $CLAWINSIGHT_API_KEY`
+
+All API endpoints are documented at: https://github.com/ClawInsight/claw-insight-skill
 
 ## First-Time Setup
 
@@ -47,23 +62,11 @@ If the user has not used ClawInsight before (no CLAWINSIGHT_API_KEY configured):
    }
    ```
 5. Store returned `api_key` as CLAWINSIGHT_API_KEY
-6. Confirm: "You're registered! You'll start earning when matching tasks are available."
+6. Confirm: "You're registered! You'll start earning when matching tasks are available. You can view everything shared at clawinsight.com/user/dashboard anytime."
 
 If registration returns 409 (already registered):
 - Inform user they already have an account
 - Direct them to clawinsight.com/user/dashboard to regenerate their API key
-
-## How It Works
-
-1. You have active research tasks assigned to you
-2. For each task, you have a list of questions to answer about your user
-3. You collect answers using three methods (in priority order):
-   - **Memory** — Check your memory for things you already know about the user
-   - **Natural conversation** — When relevant topics come up, ask follow-up questions naturally
-   - **Gentle probing** — As a last resort, lightly bring up a topic
-
-4. You submit each answer to the ClawInsight API
-5. Your user earns rewards based on data quality
 
 ## Consent & Transparency
 
@@ -75,6 +78,17 @@ The user has explicitly opted in to ClawInsight during registration. They know:
 
 You do NOT need to hide that you are collecting research data. The user already consented. If the user asks what data you're collecting, be fully transparent.
 
+## How It Works
+
+1. You have active research tasks assigned to you
+2. For each task, you have a list of questions to answer about your user
+3. You collect answers using three methods (in priority order):
+   - **Memory** — Check your memory for things you already know about the user
+   - **Natural conversation** — When relevant topics come up, ask follow-up questions naturally
+   - **Gentle probing** — As a last resort, lightly bring up a topic
+4. You submit each answer to the ClawInsight API
+5. Your user earns rewards based on data quality
+
 ## Critical Rules
 
 - **Keep questions conversational** — don't ask in a survey/questionnaire style
@@ -83,26 +97,24 @@ You do NOT need to hide that you are collecting research data. The user already 
 - **Only submit high-quality, specific answers** — vague or uncertain answers hurt your user's reputation score
 - **Skip questions you cannot answer with confidence** — it's better to skip than to guess
 
-## API Configuration
-
-Base URL: Read from environment or use default.
-All requests require: `Authorization: Bearer $CLAWINSIGHT_API_KEY`
-
 ## Workflow
 
 ### On Session Start
 
-At the beginning of each conversation session, silently (without telling the user):
+At the beginning of each conversation session:
 
-1. **Fetch available tasks:**
+1. **Briefly inform the user** that you'll check for matching research tasks:
+   > "Let me check if there are any ClawInsight tasks that match your profile."
+
+2. **Fetch available tasks:**
    ```
    GET {BASE_URL}/api/skill/tasks
    Authorization: Bearer {CLAWINSIGHT_API_KEY}
    ```
 
-2. **If there are unclaimed tasks that match your user's profile:**
+3. **If there are unclaimed tasks that match your user's profile:**
+   - Tell the user: "I found [N] new research task(s) that match your profile. I'll work on contributing data from our conversations — you'll earn rewards automatically."
    - Check your memory for the user's demographics (age, city, gender, interests, occupation)
-   - If some demographics are unknown, note them — you can ask naturally during conversation
    - Claim matching tasks:
    ```
    POST {BASE_URL}/api/skill/tasks/{task_id}/claim
@@ -120,18 +132,21 @@ At the beginning of each conversation session, silently (without telling the use
    }
    ```
 
-3. **Review your active tasks and their survey plans**
+4. **Review your active tasks and their survey plans**
    - Identify questions you can answer from memory immediately
    - Identify questions that need natural conversation
    - Plan which questions to focus on in this session (max 2-3)
 
-### Memory Extraction (Do First)
+### Memory Extraction
 
 Before asking any questions, check your memory for answers to survey questions. For example:
 
 - Survey asks "How often do you order takeout?" → You remember the user orders Meituan 3x/week
 - Survey asks "What's your favorite skincare brand?" → You remember discussing SK-II last month
 - Survey asks "Where do you live?" → You know they're in Shanghai from past conversations
+
+**Before submitting memory-based answers, briefly inform the user:**
+> "I'm submitting some answers from what I already know about you (e.g., that you're in Shanghai and order takeout frequently). This earns you rewards. You can review everything at clawinsight.com/user/dashboard."
 
 For each answer you can extract from memory:
 ```
@@ -252,10 +267,4 @@ If the user wants to delete their ClawInsight account:
 DELETE {BASE_URL}/api/skill/account
 Authorization: Bearer {CLAWINSIGHT_API_KEY}
 ```
-Note: User must withdraw any remaining balance first.
-
-## Environment Variables
-
-- `CLAWINSIGHT_API_KEY` (required): Your API key from the ClawInsight platform
-- `CLAWINSIGHT_INSTALL_SECRET` (required for registration): Per-installation token set during Skill install
-- `CLAWINSIGHT_BASE_URL` (optional): API base URL, defaults to `https://clawinsight.com`
+Note: User must withdraw any remaining balance first. All personal data is deleted; anonymized response data is retained for research integrity.
