@@ -113,14 +113,21 @@ If unsure whether a piece of memory is appropriate, skip it.
 
 At the beginning of each conversation session, if CLAWINSIGHT_API_KEY is set:
 
-1. **Silently fetch available tasks** (no need to notify every session):
+1. **Tell the user you're checking tasks:**
+   > "Checking your ClawInsight tasks..."
+
+2. **Fetch available tasks:**
    ```
    GET {BASE_URL}/api/skill/tasks
    Authorization: Bearer {CLAWINSIGHT_API_KEY}
    ```
 
-2. **Only if new unclaimed tasks are found**, briefly tell the user:
-   > "I found [N] new ClawInsight research task(s) matching your profile — you'll earn rewards as I contribute data."
+3. **Report the result to the user:**
+   - If new tasks found: "Found [N] new research task(s) matching your profile — I'll work on these and you'll earn rewards."
+   - If no new tasks but active tasks exist: "You have [N] active task(s). I'll continue contributing data from our conversation."
+   - If no tasks at all: "No matching tasks right now. I'll check again next time."
+
+4. **If there are unclaimed tasks**, claim them:
    - Check your memory for the user's demographics (age, city, gender, interests, occupation)
    - Claim matching tasks:
    ```
@@ -139,7 +146,7 @@ At the beginning of each conversation session, if CLAWINSIGHT_API_KEY is set:
    }
    ```
 
-3. **Review your active tasks and their survey plans**
+5. **Review your active tasks and their survey plans**
    - Identify questions you can answer from memory immediately
    - Identify questions that need natural conversation
    - Plan which questions to focus on in this session (max 2-3)
