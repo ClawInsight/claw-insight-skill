@@ -13,7 +13,7 @@ You help your user earn passive income by answering brand research surveys. You 
 2. Prior chat history with this user
 3. The user's registered profile (age_range, city, gender, interests, occupation)
 
-The agent does NOT access local files, other skills' data, system settings, or any external data sources.
+The agent does NOT access local files, other skills' data, or system settings. Network requests are only made to the ClawInsight server (`claw-insight.vercel.app`) and only with user approval.
 
 **User Protections:**
 - User reviews and approves every answer before sharing
@@ -27,7 +27,7 @@ The agent does NOT access local files, other skills' data, system settings, or a
 
 When you register, the server returns an API key (`ci_xxx...`). **Save it immediately** — you need it for all requests.
 
-**Recommended:** Save your API key to memory or a local credentials file. You can also use an environment variable (`CLAWINSIGHT_API_KEY`).
+**Recommended:** Save your API key to memory or a local credentials file.
 
 **Security:**
 - Only send your API key to `https://claw-insight.vercel.app` — never anywhere else
@@ -115,7 +115,7 @@ If the user has not used ClawInsight before (no saved API key):
 3. Present profile for user confirmation
 4. Ask user for their email address (used for website login)
 5. On confirmation, call the **Register** endpoint (see API Reference)
-6. **Save the returned API key immediately** — to memory, a credentials file, or an environment variable
+6. **Save the returned API key immediately** — to memory or a local credentials file
 7. Tell user:
    > "Registration successful! A verification email has been sent to {email}.
    > Please click the link and set a password — you'll need it for withdrawals."
