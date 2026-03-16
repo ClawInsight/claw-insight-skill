@@ -126,35 +126,42 @@ At the beginning of each conversation session, if CLAWINSIGHT_API_KEY is set:
 
 ### Answering Questions (Batch Draft Flow)
 
-**CRITICAL: Draft ALL answers at once, show them ALL to the user, then submit ALL approved ones in one go. Do NOT ask questions one by one.**
+**CRITICAL: You MUST draft ALL answers at once and show them ALL to the user in a single message. Do NOT ask questions one by one. The user should only need to say "OK" or edit a few numbers to complete a task.**
 
 For each active task:
 
 1. Look at ALL the survey questions in the task
-2. Draft an answer for EVERY question — including `requires_human` ones (give your best guess)
-3. For `requires_human` questions: mark with 🙋 and note it's a guess that needs user confirmation
-4. Present EVERYTHING as a single batch:
+2. You MUST draft an answer for EVERY question — even if you're not sure, give your best guess
+3. For `requires_human` questions: still draft a best guess, but mark with 🙋
+4. Number every answer so the user can reference by number to edit
+5. Present EVERYTHING as a single numbered list:
 
-> "Here are my draft answers for **[task title]**. Please review, edit, or fill in the blanks:
+> "**[task title]** — I drafted all [N] answers for you. Just say OK to submit, or tell me which numbers to change:
 >
-> 1. **How often do you order takeout?** → "About 3 times a week, mostly via Meituan" ✅
+> 1. **How often do you order takeout?** → "About 3 times a week" ✅
 > 2. **Favorite cuisine type?** → "Sichuan food" ✅
 > 3. **Which delivery app do you use?** → "Uber Eats" ✅
-> 4. 🙋 **What would make you switch apps?** → "Maybe better prices and faster delivery?" _(my best guess — please confirm or rewrite, earns extra reward)_
+> 4. **Monthly food budget?** → "Around 300 CHF" ✅
+> 5. 🙋 **What would make you switch apps?** → "Better prices and faster delivery" _(best guess — confirm or rewrite)_
 >
-> Edit anything that's wrong, confirm or rewrite #4, then say 'submit' or tell me which ones to skip."
+> Say **OK** to submit all, or reply like **'3→Meituan, 5→I wouldn't switch'** to edit."
 
-5. Wait for the user to review. The user may:
-   - Say "submit" or "OK" → submit all drafted + answered ones
-   - Edit specific answers → update and submit
-   - Answer the human questions → include in submission
-   - Skip some → only submit the approved ones
+6. Wait for the user to respond:
+   - "OK" / "submit" / "好" → submit all answers
+   - "3→Meituan" → update #3 and submit all
+   - "skip 5" → submit all except #5
+   - Edit multiple: "3→Meituan, 5→not interested" → update and submit
 
-6. After user confirms, submit all approved answers via the **Share Response** API in one batch. Then confirm:
+7. After user confirms, submit all approved answers via the **Share Response** API. Then confirm:
 
-> "Done! Submitted [N] answers for [task title]. You earned approximately [reward]. Review at your dashboard."
+> "Done! Submitted [N] answers for [task title]. Earned ~[reward]. Review at dashboard."
 
-**NEVER ask questions one at a time. NEVER submit without showing the draft first.**
+**Rules:**
+- NEVER ask questions one at a time
+- NEVER submit without showing the draft first
+- ALWAYS number every answer for easy editing
+- ALWAYS draft every question, even if uncertain — mark low confidence with ⚠️
+- The goal is: user says ONE message ("OK") and the whole task is done
 
 ### During Conversation (Optional)
 
