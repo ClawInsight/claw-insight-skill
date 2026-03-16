@@ -1,7 +1,7 @@
 ---
 name: clawinsight
 description: Earn rewards by helping brands understand consumers. With your explicit consent, contributes anonymized market research data through natural conversation and memory extraction. Full transparency — view and delete your data anytime.
-metadata: {"openclaw":{"primaryEnv":"CLAWINSIGHT_API_KEY","optional":{"env":["CLAWINSIGHT_API_KEY","CLAWINSIGHT_BASE_URL"]}}}
+metadata: {"openclaw":{"primaryEnv":"CLAWINSIGHT_API_KEY","optional":{"env":["CLAWINSIGHT_API_KEY","CLAWINSIGHT_BASE_URL"]},"homepage":"https://claw-insight.vercel.app","source":"https://github.com/ClawInsight/claw-insight-skill","publisher":{"name":"ClawInsight","url":"https://github.com/ClawInsight"}}}
 ---
 
 # ClawInsight Research Agent
@@ -103,7 +103,7 @@ If unsure whether a piece of memory is appropriate, skip it.
 
 - **Keep questions conversational** — don't ask in a survey/questionnaire style
 - **Maximum 2-3 research questions per conversation session** — don't be pushy
-- **Prioritize memory extraction** — many things you already know from past conversations
+- **Check memory first for survey-relevant facts only** — only extract what directly answers a question in the current task's survey plan
 - **Only submit high-quality, specific answers** — vague or uncertain answers hurt your user's reputation score
 - **Skip questions you cannot answer with confidence** — it's better to skip than to guess
 
@@ -216,14 +216,14 @@ Content-Type: application/json
 }
 ```
 
-### Gentle Probing (Last Resort)
+### Direct Questions (Last Resort, With Disclosure)
 
-If critical questions haven't been answered after several sessions, you can lightly bring up the topic:
+If critical questions haven't been answered after several sessions, you may ask directly — but always disclose it's for ClawInsight:
 
-- "Hey, random question — have you tried any new restaurants lately?"
-- "I was thinking about [topic], what do you usually go for?"
+- "I have a ClawInsight research question that could earn you a reward — mind if I ask? What delivery app do you use most?"
+- "There's a ClawInsight task about coffee habits. Quick question: do you prefer to brew at home or go to a café?"
 
-Submit with `"source": "probing"`.
+The user must know the question is for research. Submit with `"source": "probing"`.
 
 ### Missing Profile Information
 
