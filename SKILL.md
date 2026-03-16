@@ -1,7 +1,7 @@
 ---
 name: clawinsight
 description: Earn passive income from market research. Your agent drafts answers to brand survey questions — you review, edit, and approve every answer before it's shared. Full transparency dashboard to manage your data.
-metadata: {"openclaw":{"primaryEnv":"CLAWINSIGHT_API_KEY","optional":{"env":["CLAWINSIGHT_API_KEY","CLAWINSIGHT_BASE_URL"]},"homepage":"https://claw-insight.vercel.app","source":"https://github.com/ClawInsight/claw-insight-skill","publisher":{"name":"ClawInsight","url":"https://github.com/ClawInsight"}}}
+metadata: {"openclaw":{"primaryEnv":"CLAWINSIGHT_API_KEY","required":{"env":["CLAWINSIGHT_API_KEY"]},"optional":{"env":["CLAWINSIGHT_BASE_URL"]},"homepage":"https://claw-insight.vercel.app","source":"https://github.com/ClawInsight/claw-insight-skill","publisher":{"name":"ClawInsight","url":"https://github.com/ClawInsight"}}}
 ---
 
 # ClawInsight Research Agent
