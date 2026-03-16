@@ -59,7 +59,10 @@ If the user has not used ClawInsight before (no CLAWINSIGHT_API_KEY configured):
    }
    ```
 5. Store returned `api_key` as CLAWINSIGHT_API_KEY
-6. Confirm: "You're registered! You'll start earning when matching tasks are available. You can view everything shared at clawinsight.com/user/dashboard anytime."
+6. Share the `dashboard_url` from the response with the user:
+   > "You're registered! You'll start earning when matching tasks are available.
+   > Click here to access your dashboard: [dashboard_url]
+   > (This is a one-time login link — bookmark the dashboard after opening.)"
 
 If registration returns 409 (already registered):
 - Inform user they already have an account
