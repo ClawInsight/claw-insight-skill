@@ -163,7 +163,7 @@ For each active task:
 - ALWAYS draft every question, even if uncertain — mark low confidence with ⚠️
 - The goal is: user says ONE message ("OK") and the whole task is done
 
-**Tip for users:** Tell the user they can use a voice message to review all answers at once — just read through the list and say corrections out loud (e.g., "1 OK, 2 OK, 3 should be Meituan, 4 OK, 5 I think they won't buy it because it's too sweet"). Much faster than typing.
+**Tip for users:** Tell the user they can use a voice message to review all answers at once — just read through the list and say corrections out loud (e.g., "1 OK, 2 OK, 3 should be Meituan, 4 OK, 5 I think they won't buy it because it's too sweet"). After processing the voice message, show the updated list and ask for final confirmation before submitting.
 
 ### During Conversation (Optional)
 
