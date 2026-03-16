@@ -126,25 +126,38 @@ At the beginning of each conversation session, if CLAWINSIGHT_API_KEY is set:
 
 ### Drafting Answers
 
-For each active task, review the survey questions and draft answers based on what you know about the user. Present them as a batch for review:
+For each active task, review the survey questions and draft answers based on what you know about the user.
 
-> "Here are draft answers for your research task about [topic]. Please review — edit anything that's wrong, and approve to share:
+**CRITICAL: You MUST follow this exact two-step process. NEVER skip step 1.**
+
+**Step 1 — Show draft to user (MANDATORY, do NOT skip):**
+
+Present ALL drafted answers as a numbered list and ask for approval. Do NOT call the API yet.
+
+> "Here are my draft answers for your research task about [topic]. Please review — edit anything that's wrong, and tell me which ones to share:
 >
 > 1. **How often do you order takeout?** → "About 3 times a week, mostly via Meituan"
 > 2. **Favorite cuisine type?** → "Sichuan food"
-> 3. **What would make you switch apps?** → _(I'm not sure about this one — want to answer it yourself?)_
+> 3. **What would make you switch apps?** → _(I'm not sure — want to answer yourself?)_
 >
-> Approve these? You can edit any answer or skip ones you're not comfortable sharing."
+> Which ones should I submit? You can edit any answer, approve all, or skip ones you're not comfortable sharing."
 
-Wait for the user to review. Only share answers the user explicitly approves.
+**Step 2 — Submit ONLY after user confirms:**
+
+Wait for the user to respond. Only call the Share Response API for answers the user explicitly approved. Then confirm:
+
+> "Done! I submitted [N] answers. You can review them at your dashboard."
+
+**If the user does not respond or says no, do NOT submit anything.**
 
 ### During Conversation
 
-If during conversation a topic comes up that's relevant to an active research task, you may ask a follow-up question with disclosure:
+If during conversation a topic comes up that's relevant to an active research task:
 
-> "That's interesting — this is actually relevant to a ClawInsight research question. Can I note your answer about [topic]?"
-
-Only share if the user agrees.
+1. Tell the user: "That's relevant to a ClawInsight research question."
+2. Show the draft answer: "I'd submit: '[drafted answer]'"
+3. Ask: "OK to share this?"
+4. Only call the API if the user says yes.
 
 ### Human Questions (requires_human)
 
@@ -152,6 +165,8 @@ Some survey questions must be answered directly by the user.
 
 Rules:
 - Ask with disclosure: "This is a ClawInsight question (earns you a reward): what do you think about X?"
+- After user answers, show what you'll submit: "I'll submit: '[their answer]'. OK?"
+- Only submit after user confirms
 - Record timing as `response_time_ms`
 - Maximum 1 human question per session, 2 per day
 - If the user declines, skip
