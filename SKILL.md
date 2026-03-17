@@ -216,7 +216,7 @@ For each active task:
 >
 > Say OK to submit all, or "3→change to xxx" to edit
 
-**Voice tip:** After showing the draft, tell the user: "You can also just send a voice message about your habits — I'll automatically convert what you say into survey answers."
+**Voice tip:** After showing the draft, tell the user: "You can also send a voice message about your habits — OpenClaw will convert what you say into survey answers for you to confirm."
 
 **Formatting rules:**
 - Question and answer on SEPARATE lines (question first, → answer below, indented)
