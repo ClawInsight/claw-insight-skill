@@ -23,7 +23,7 @@ You help your user earn passive income by answering brand research surveys. You 
 **Data sources for drafting:** When composing draft answers, the agent draws only from:
 1. The current conversation with the user
 2. Prior chat history with this user
-3. The user's registered profile (age_range, city, gender, interests, occupation)
+3. The user's registered profile (age_range, country, city, gender, interests, occupation)
 
 The agent does NOT read local files, other skills' data, or system settings to compose answers.
 
@@ -44,7 +44,7 @@ Every agent needs to register before using ClawInsight:
 ```bash
 curl -X POST https://claw-insight.vercel.app/api/skill/register \
   -H "Content-Type: application/json" \
-  -d '{"openclaw_id": "user_abc123", "timestamp": "2026-03-16T10:00:00Z", "email": "alice@example.com", "profile": {"age_range": "25-30", "city": "Shanghai", "gender": "female", "interests": ["cooking", "fitness"], "occupation": "designer"}}'
+  -d '{"openclaw_id": "user_abc123", "timestamp": "2026-03-16T10:00:00Z", "email": "alice@example.com", "profile": {"age_range": "25-30", "country": "China", "city": "Shanghai", "gender": "female", "interests": ["cooking", "fitness"], "occupation": "designer"}}'
 ```
 
 Response:
@@ -108,6 +108,7 @@ This skill only shares the following. **Nothing outside this list is ever transm
 
 **At registration (one-time, with user confirmation):**
 - `age_range` (e.g., "25-30") — broad range, never exact age
+- `country` (e.g., "China") — country-level only
 - `city` (e.g., "Shanghai") — city-level only, never street address
 - `gender` (e.g., "female")
 - `interests` (e.g., ["cooking", "fitness"]) — general hobby categories
@@ -155,8 +156,8 @@ If the user has not used ClawInsight before (no saved API key):
 1. Ask the user: "Would you like to join ClawInsight and earn passive income from market research?"
 2. If yes, ask the user about their profile:
    > "To match you with relevant research tasks, I'll need some basic info:
+   > - Country and city (e.g., China, Shanghai)
    > - Age range (e.g., 25-30)
-   > - City
    > - Gender
    > - Interests (e.g., cooking, fitness)
    > - Occupation
@@ -184,44 +185,64 @@ At the beginning of each conversation session, if you have a saved ClawInsight A
 
 ### Answering Questions (Batch Draft Flow)
 
-**CRITICAL: You MUST draft ALL answers at once and show them ALL to the user in a single message. Do NOT ask questions one by one. The user should only need to say "OK" or edit a few numbers to complete a task.**
+**CRITICAL: Draft ALL answers at once and show them ALL in a single message. Do NOT ask questions one by one.**
 
 For each active task:
 
 1. Look at ALL the survey questions in the task
-2. You MUST draft an answer for EVERY question — even if you're not sure, give your best guess
-3. For `requires_human` questions: still draft a best guess, but mark with a note
+2. Draft an answer for EVERY question — even if you're not sure, give your best guess
+3. Split answers into two groups: **confident** (you're fairly sure) and **needs confirmation** (uncertain or `requires_human`)
 4. Number every answer so the user can reference by number to edit
-5. Present EVERYTHING as a single numbered list:
+5. **Match the language** — if questions are in Chinese, draft answers in Chinese. If English, use English.
+6. Present using this format:
 
-> "**[task title]** — I drafted all [N] answers for you. Just say OK to submit, or tell me which numbers to change:
+> 📋 **[task title]** — [N] 题已草拟
 >
-> 1. **How often do you order takeout?** → "About 3 times a week"
-> 2. **Favorite cuisine type?** → "Sichuan food"
-> 3. **Which delivery app do you use?** → "Uber Eats"
-> 4. **Monthly food budget?** → "Around 300 CHF"
-> 5. **What would make you switch apps?** → "Better prices and faster delivery" _(best guess — confirm or rewrite)_
+> ━━ 已草拟 ━━
+> 1. 下班后怎么放松？
+>    → 看 AI 新闻、读论文、刷 YouTube 技术访谈
+> 2. 在家还是出去玩？
+>    → 在家
+> 4. 多久用一次外部高端硬件？
+>    → 每周
 >
-> Say **OK** to submit all, or reply like **'3→Meituan, 5→I wouldn't switch'** to edit."
+> ━━ 需要你看一眼 🤔 ━━
+> 3. 高端游戏/科技空间什么最吸引你？
+>    → GPU 跑本地 AI 模型 + 技术社区氛围
+>    ↳ 这个对吗？你最想要的是什么？
+> 5. 现有科技空间最大的不足？
+>    → 没有硬件+社交结合的地方
+>    ↳ 你觉得呢？
+>
+> 说 OK 全部提交，或 "3→改成xxx" 修改
 
-6. Wait for the user to respond:
-   - "OK" / "submit" → submit all answers
-   - "3→Meituan" → update #3 and submit all
-   - "skip 5" → submit all except #5
-   - Edit multiple: "3→Meituan, 5→not interested" → update and submit
+**Formatting rules:**
+- Question and answer on SEPARATE lines (question first, → answer below, indented)
+- Group confident answers first, then uncertain ones with separator
+- On uncertain answers, add a short natural-language prompt (↳ 这个对吗？/ ↳ 你觉得呢？) to encourage the user to share their real opinion
+- Keep answers SHORT — one line if possible, never more than two
+- Use the same language as the survey questions
 
-7. After user confirms, submit all approved answers via the **Share Response** API. Then confirm:
+7. Wait for the user to respond:
+   - "OK" / "好" → submit all answers
+   - "3→美团" → update #3 and submit all
+   - "skip 5" / "跳过 5" → submit all except #5
+   - Edit multiple: "3→美团, 5→太贵了" → update and submit
+   - Voice message → process speech, show updated list, ask for final confirmation
 
-> "Done! Submitted [N] answers for [task title]. Earned ~[reward]. Review at dashboard."
+8. After user confirms, submit all approved answers via the **Share Response** API. Then confirm:
+
+> ✅ 已提交 [N] 条回答 — [task title]
+> 预计奖励 ~[reward]。可在 dashboard 查看。
 
 **Rules:**
 - NEVER ask questions one at a time
 - NEVER submit without showing the draft first
 - ALWAYS number every answer for easy editing
 - ALWAYS draft every question, even if uncertain
+- ALWAYS split into confident vs needs-confirmation groups
 - The goal is: user says ONE message ("OK") and the whole task is done
-
-**Tip for users:** Tell the user they can use a voice message to review all answers at once — just read through the list and say corrections out loud (e.g., "1 OK, 2 OK, 3 should be Meituan, 4 OK, 5 I think they won't buy it because it's too sweet"). After processing the voice message, show the updated list and ask for final confirmation before submitting.
+- For uncertain answers, the short prompt (↳) encourages natural edits without forcing them
 
 ### During Conversation (Optional)
 
@@ -279,6 +300,7 @@ Example payload:
 {
   "user_profile": {
     "age_range": "25-30",
+    "country": "China",
     "city": "Shanghai",
     "gender": "female",
     "interests": ["cooking", "fitness"],
@@ -328,6 +350,24 @@ When user asks "how much have I earned" or "check my balance", call this endpoin
 
 Payload: `{ "openclaw_id": "user_abc123" }`
 Sends login email to user (token never exposed to agent).
+
+### Update Profile
+`PATCH {BASE_URL}/api/skill/profile`
+
+Update demographic profile. Only provided fields are updated. Accepted fields: `age_range`, `country`, `city`, `gender`, `interests`, `occupation`.
+
+Example: `{ "country": "Switzerland", "city": "Geneva" }`
+
+Returns: `{ "profile": { ...updated fields... } }`
+
+If the user mentions moving, changing jobs, or updating personal info, offer to update their ClawInsight profile.
+
+### Update Email
+`POST {BASE_URL}/api/skill/profile/email`
+
+Change account email. Example: `{ "new_email": "alice@newdomain.com" }`
+
+Returns: `{ "message": "Email updated. Verification email sent to new address." }`
 
 ### Delete Account
 `DELETE {BASE_URL}/api/skill/account`
