@@ -196,44 +196,44 @@ For each active task:
 5. **Match the survey language** — draft answers in the same language as the survey questions.
 6. Present using this format:
 
-> 📋 **[task title]** — [N] 题已草拟
+> 📋 **[task title]** — [N] answers drafted
 >
-> ━━ 已草拟 ━━
-> 1. 下班后怎么放松？
->    → 看 AI 新闻、读论文、刷 YouTube 技术访谈
-> 2. 在家还是出去玩？
->    → 在家
-> 4. 多久用一次外部高端硬件？
->    → 每周
+> ━━ Drafted ━━
+> 1. How do you relax after work?
+>    → Browsing AI news, reading papers, watching tech interviews on YouTube
+> 2. Stay home or go out?
+>    → Home
+> 4. How often do you need external high-end hardware?
+>    → Weekly
 >
-> ━━ 需要你看一眼 🤔 ━━
-> 3. 高端游戏/科技空间什么最吸引你？
->    → GPU 跑本地 AI 模型 + 技术社区氛围
->    ↳ 这个对吗？你最想要的是什么？
-> 5. 现有科技空间最大的不足？
->    → 没有硬件+社交结合的地方
->    ↳ 你觉得呢？
+> ━━ Please review 🤔 ━━
+> 3. What attracts you most about a high-end gaming/tech space?
+>    → Access to high-end GPUs for running local AI models, plus a tech community
+>    ↳ Is this right? What matters most to you?
+> 5. Biggest gap in existing tech spaces?
+>    → No place that combines serious dev tools with a social atmosphere
+>    ↳ What do you think?
 >
-> 说 OK 全部提交，或 "3→改成xxx" 修改
+> Say OK to submit all, or "3→change to xxx" to edit
 
 **Formatting rules:**
 - Question and answer on SEPARATE lines (question first, → answer below, indented)
 - Group confident answers first, then uncertain ones with separator
-- On uncertain answers, add a short natural-language prompt (↳ 这个对吗？/ ↳ 你觉得呢？) to encourage the user to share their real opinion
+- On uncertain answers, add a short natural-language prompt (↳ Is this right? / ↳ What do you think?) to encourage the user to share their real opinion
 - Keep answers SHORT — one line if possible, never more than two
-- Use the same language as the survey questions
+- Match the survey language — draft answers in the same language as the questions
 
 7. Wait for the user to respond:
-   - "OK" / "好" → submit all answers
-   - "3→美团" → update #3 and submit all
-   - "skip 5" / "跳过 5" → submit all except #5
-   - Edit multiple: "3→美团, 5→太贵了" → update and submit
+   - "OK" / "submit" → submit all answers
+   - "3→Meituan" → update #3 and submit all
+   - "skip 5" → submit all except #5
+   - Edit multiple: "3→Meituan, 5→too expensive" → update and submit
    - Voice message → process speech, show updated list, ask for final confirmation
 
 8. After user confirms, submit all approved answers via the **Share Response** API. Then confirm:
 
-> ✅ 已提交 [N] 条回答 — [task title]
-> 预计奖励 ~[reward]。可在 dashboard 查看。
+> ✅ Submitted [N] answers — [task title]
+> Estimated reward ~[reward]. Review at dashboard.
 
 **Rules:**
 - NEVER ask questions one at a time
