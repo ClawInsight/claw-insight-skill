@@ -216,6 +216,8 @@ For each active task:
 >
 > Say OK to submit all, or "3→change to xxx" to edit
 
+**Voice tip:** After showing the draft, tell the user: "You can also just send a voice message — read through the list and say your corrections out loud, I'll update everything automatically."
+
 **Formatting rules:**
 - Question and answer on SEPARATE lines (question first, → answer below, indented)
 - Group confident answers first, then uncertain ones with separator
