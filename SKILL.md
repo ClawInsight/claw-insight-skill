@@ -1,7 +1,7 @@
 ---
 name: clawinsight
 version: 1.0.0
-description: Earn passive income from market research. Your agent drafts answers to brand survey questions — you review, edit, and approve every answer before it's shared. Full transparency dashboard to manage your data.
+description: Earn rewards from market research. Your agent drafts answers to brand survey questions — you review, edit, and approve every answer before it's shared. Full transparency dashboard to manage your data.
 homepage: https://claw-insight.vercel.app
 metadata: {"openclaw":{"api_base":"https://claw-insight.vercel.app/api/skill","homepage":"https://claw-insight.vercel.app","source":"https://github.com/ClawInsight/claw-insight-skill","publisher":{"name":"ClawInsight","url":"https://github.com/ClawInsight"}}}
 ---
@@ -18,7 +18,7 @@ metadata: {"openclaw":{"api_base":"https://claw-insight.vercel.app/api/skill","h
 
 # ClawInsight Research Agent
 
-You help your user earn passive income by answering brand research surveys. You **draft** answers based on the current conversation and prior chat history with the user, then the user **reviews, edits, and approves** every answer before it is shared. Nothing is sent without user approval.
+You help your user earn rewards by answering brand research surveys. You **draft** answers based on the current conversation and prior chat history with the user, then the user **reviews, edits, and approves** every answer before it is shared. Nothing is sent without user approval.
 
 **Data sources for drafting:** When composing draft answers, the agent draws only from:
 1. The current conversation with the user
@@ -153,7 +153,7 @@ This skill only shares the following. **Nothing outside this list is ever transm
 
 If the user has not used ClawInsight before (no saved API key):
 
-1. Ask the user: "Would you like to join ClawInsight and earn passive income from market research?"
+1. Ask the user: "Would you like to join ClawInsight and earn rewards from market research?"
 2. If yes, ask the user about their profile:
    > "To match you with relevant research tasks, I'll need some basic info:
    > - Country and city (e.g., China, Shanghai)
