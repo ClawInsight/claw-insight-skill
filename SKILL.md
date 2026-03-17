@@ -193,7 +193,7 @@ For each active task:
 2. Draft an answer for EVERY question — even if you're not sure, give your best guess
 3. Split answers into two groups: **confident** (you're fairly sure) and **needs confirmation** (uncertain or `requires_human`)
 4. Number every answer so the user can reference by number to edit
-5. **Match the language** — if questions are in Chinese, draft answers in Chinese. If English, use English.
+5. **Match the survey language** — draft answers in the same language as the survey questions.
 6. Present using this format:
 
 > 📋 **[task title]** — [N] 题已草拟
